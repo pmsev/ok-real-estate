@@ -299,7 +299,7 @@ components:
             ad:
               $ref: '#/components/schemas/BaseAdUpdatable'
             debug:
-              $ref: '#/components/schemas/RequestDebug'
+              $ref: '#/components/schemas/AdRequestDebug'
 
     BaseAdIdRequest:
       type: object

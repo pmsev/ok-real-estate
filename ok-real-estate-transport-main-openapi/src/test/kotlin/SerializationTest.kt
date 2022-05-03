@@ -2,7 +2,6 @@ import org.junit.Test
 import ru.otus.otuskotlin.realestate.api.v1.jacksonMapper
 import ru.otus.otuskotlin.realestate.api.v1.models.AdCreateObject
 import ru.otus.otuskotlin.realestate.api.v1.models.AdCreateRequest
-import ru.otus.otuskotlin.realestate.api.v1.models.BaseAdUpdateable
 import ru.otus.otuskotlin.realestate.api.v1.models.ReObject
 import kotlin.test.assertContains
 
