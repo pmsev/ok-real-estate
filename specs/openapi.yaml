@@ -155,18 +155,20 @@ paths:
 components:
   schemas:
 
-    AdCreateObject:
-      allOf:
-        - $ref: '#/components/schemas/BaseAdUpdatable'
-
-    AdUpdateObject:
-      allOf:
-        - $ref: '#/components/schemas/BaseAdUpdatable'
-        - type: object
-          properties:
-            id:
-              type: string
-
+    RequestDebug:
+      type: object
+      properties:
+        mode:
+          type: string
+          enum:
+            - prod
+            - test
+            - stub
+        stub:
+          type: string
+          description: 'Тип стаба, который запрашиваем в режиме mode: stub'
+          enum:
+            - success
 
     Request:
       type: object
@@ -195,7 +197,7 @@ components:
       properties:
         code:
           type: string
-        group:
+        groupd:
           type: string
         field:
           type: string
@@ -241,9 +243,6 @@ components:
     ReObject:
       type: object
       properties:
-        id:
-          type: string
-          description: Идентификатор объекта недвижимости
         square:
           type: number
           format: double
@@ -275,7 +274,7 @@ components:
         - reserved
         - closed
 
-    BaseAdUpdatable:
+    BaseAdUpdateable:
       type: object
       description: Объект описывает свойства, одинаковые для create и update
       properties:
@@ -285,19 +284,19 @@ components:
         description:
           type: string
           description: Описание объявления
-        sellerId:
+        buyerId:
           type: string
           description: Идентификатор продавца
         re:
           $ref: '#/components/schemas/ReObject'
 
 
-    BaseAdUpdatableRequest:
+    BaseAdUpdateableRequest:
       allOf:
         - type: object
           properties:
             ad:
-              $ref: '#/components/schemas/BaseAdUpdatable'
+              $ref: '#/components/schemas/BaseAdUpdateable'
             debug:
               $ref: '#/components/schemas/RequestDebug'
 
@@ -305,10 +304,27 @@ components:
       type: object
       properties:
         ad:
+          allOf:
+              - $ref: '#/components/schemas/BaseWithId'
+        debug:
+          type: object
+          properties:
+            stub:
+              type: string
+              enum:
+                - success
+                - notFound
+                - badId
+
+    BaseWithId:
+      type: object
+      properties:
+        ad:
           type: object
           properties:
             id:
               type: string
+              description: Идентификатор объявления
             status:
               type: string
               description: Статус объявления
@@ -320,34 +336,33 @@ components:
     AdCreateRequest:
       allOf:
         - $ref: '#/components/schemas/Request'
-        - $ref: '#/components/schemas/AdRequestDebug'
-        - type: object
-          properties:
-            ad:
-              $ref: '#/components/schemas/AdCreateObject'
+        - $ref: '#/components/schemas/BaseAdUpdateableRequest'
 
     AdReadRequest:
       allOf:
         - $ref: '#/components/schemas/Request'
         - $ref: '#/components/schemas/BaseAdIdRequest'
-        - $ref: '#/components/schemas/AdRequestDebug'
-
 
     AdUpdateRequest:
       allOf:
         - $ref: '#/components/schemas/Request'
-        - $ref: '#/components/schemas/AdRequestDebug'
+        - $ref: '#/components/schemas/BaseAdUpdateableRequest'
         - type: object
           properties:
             ad:
-              $ref: '#/components/schemas/AdUpdateObject'
+              allOf:
+                - $ref: '#/components/schemas/BaseWithId'
 
     AdDeleteRequest:
       allOf:
         - $ref: '#/components/schemas/Request'
         - $ref: '#/components/schemas/BaseAdIdRequest'
-        - $ref: '#/components/schemas/AdRequestDebug'
-
+        - type: object
+          properties:
+            stub:
+              type: string
+              enum:
+                - cannotDelete
 
     AdSearchFilter:
       type: object
@@ -360,23 +375,20 @@ components:
     AdSearchRequest:
       allOf:
         - $ref: '#/components/schemas/Request'
-        - $ref: '#/components/schemas/AdRequestDebug'
         - type: object
           properties:
-            adFilter:
+            adFileter:
               $ref: '#/components/schemas/AdSearchFilter'
 
     AdOffersRequest:
       allOf:
         - $ref: '#/components/schemas/Request'
         - $ref: '#/components/schemas/BaseAdIdRequest'
-        - $ref: '#/components/schemas/AdRequestDebug'
   
     AdActionRequest:
       allOf:
         - $ref: '#/components/schemas/Request'
         - $ref: '#/components/schemas/BaseAdIdRequest'
-        - $ref: '#/components/schemas/AdRequestDebug'
         - type: object
           properties:
             actionType:
@@ -401,12 +413,11 @@ components:
 
     AdResponseObject:
       allOf:
-        - $ref: '#/components/schemas/BaseAdUpdatable'
+        - $ref: '#/components/schemas/BaseWithId'
+        - $ref: '#/components/schemas/BaseAdUpdateable'
         - type: object
           description: Объект, который возвращается в ответе бэкенда
           properties:
-            id:
-              type: string
             actions:
               type: array
               uniqueItems: true
@@ -415,11 +426,13 @@ components:
 
     AdResponseSingle:
       allOf:
+        - $ref: '#/components/schemas/BaseAdUpdateableRequest'
         - type: object
           description: Ответ с одним объектом объявления
           properties:
             ad:
               $ref: '#/components/schemas/AdResponseObject'
+
 
     AdCreateResponse:
       allOf:
@@ -467,39 +480,4 @@ components:
     AdActionResponse:
       allOf:
         - $ref: '#/components/schemas/Response'
-
-    # STUBS ======================
-
-    AdRequestDebugMode:
-      type: string
-      enum:
-        - prod
-        - test
-        - stub
-
-    AdRequestDebug:
-      type: object
-      properties:
-        debug:
-          $ref: '#/components/schemas/AdDebug'
-
-    AdDebug:
-      type: object
-      properties:
-        mode:
-          $ref: '#/components/schemas/AdRequestDebugMode'
-        stub:
-          $ref: '#/components/schemas/AdRequestDebugStubs'
-
-    AdRequestDebugStubs:
-      type: string
-      description: Перечисления всех стабов
-      enum:
-        - success
-        - notFound
-        - badId
-        - badTitle
-        - badDescription
-        - cannotDelete
-        - badSearchString
-
+        
