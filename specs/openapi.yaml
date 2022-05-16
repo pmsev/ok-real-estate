@@ -237,6 +237,17 @@ components:
           offers: '#/components/schemas/AdOffersResponse'
           action: '#/components/schemas/AdActionResponse'
 
+    Location:
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: double
+          description: Широта
+        longitude:
+          type: number
+          format: double
+          description: Долгота
 
     ReObject:
       type: object
@@ -265,6 +276,12 @@ components:
           type: integer
           format: int32
           description: Число комнат
+        address:
+          type: string
+          description: Адрес объекта
+        location:
+          $ref: '#/components/schemas/Location'
+
           
 
     AdStatus:

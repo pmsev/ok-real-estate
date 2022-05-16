@@ -1,4 +1,6 @@
 import models.*
+import models.location.Degree
+import models.location.ReoLocation
 import ru.otus.otuskotlin.realestate.api.v1.models.*
 
 fun ReContext.toTransportAd(): Response = when (val cmd = command) {
@@ -41,7 +43,14 @@ private fun ReIntObject.toTransport(): ReObject = ReObject(
     square = square,
     price = price,
     district = district.toTransport(),
-    rooms = rooms
+    rooms = rooms,
+    address = address,
+    location = location.toTransport()
+    )
+
+private fun ReoLocation.toTransport(): Location = Location(
+    latitude = latitude.takeIf { it != Degree.NONE }?.asDouble(),
+    longitude = longitude.takeIf { it != Degree.NONE }?.asDouble()
 )
 
 private fun ReDistrict.toTransport(): ReObject.District? = when (this) {

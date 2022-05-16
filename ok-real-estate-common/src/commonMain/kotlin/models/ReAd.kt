@@ -1,5 +1,8 @@
 package models
 
+/**
+ * Real Estate Advertisement - объявление о продаже недвижимости
+ */
 data class ReAd (
     var id: ReAdId = ReAdId.NONE,
     var title: String = "",

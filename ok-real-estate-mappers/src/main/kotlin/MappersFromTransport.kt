@@ -1,5 +1,7 @@
 import exceptions.UnknownRequestClass
 import models.*
+import models.location.Degree
+import models.location.ReoLocation
 import ru.otus.otuskotlin.realestate.api.v1.models.*
 import stubs.ReStubs
 
@@ -75,7 +77,15 @@ private fun ReObject.fromTransport() = ReIntObject(
     square = this.square ?: 0.0,
     price = this.price ?: 0,
     district = this.district.fromTransport(),
-    rooms = this.rooms ?: 0
+    rooms = this.rooms ?: 0,
+    address = this.address ?: "",
+    location = this.location?.fromTransport() ?: ReoLocation.NONE
+)
+
+private fun Double?.toDegree() = this?.let { Degree(it) } ?: Degree.NONE
+private fun Location.fromTransport() = ReoLocation(
+    latitude = this.latitude.toDegree(),
+    longitude = this.longitude.toDegree()
 )
 
 private fun AdSearchFilter?.toInternal(): ReAdFilter = ReAdFilter(

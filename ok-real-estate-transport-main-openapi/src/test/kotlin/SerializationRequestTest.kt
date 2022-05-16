@@ -8,16 +8,18 @@ import kotlin.test.assertEquals
 class SerializationRequestTest {
 
     private val createRequest = AdCreateRequest(
-            ad = AdCreateObject(
-                    title = "Title",
-                    description = "Description",
-                    re = ReObject(
-                            square = 70.0,
-                            price = 15000000,
-                            district = ReObject.District.CENTRAL,
-                            rooms = 3
-                    )
+        ad = AdCreateObject(
+            title = "Title",
+            description = "Description",
+            re = ReObject(
+                square = 70.0,
+                price = 15000000,
+                district = ReObject.District.CENTRAL,
+                rooms = 3,
+                address = "Address",
+                location = Location(25.5555, 37.7777)
             )
+        )
     )
 
     @Test
@@ -36,5 +38,6 @@ class SerializationRequestTest {
         assertEquals("Title", decoded.ad?.title)
         assertEquals("Description", decoded.ad?.description)
         assertEquals(ReObject.District.CENTRAL, decoded.ad?.re?.district)
+        assertEquals(25.5555, decoded.ad?.re?.location?.latitude)
     }
 }

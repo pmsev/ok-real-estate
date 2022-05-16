@@ -1,10 +1,7 @@
 import org.junit.Test
 import ru.otus.otuskotlin.realestate.api.v1.apiV1ResponseDeserialize
 import ru.otus.otuskotlin.realestate.api.v1.apiV1ResponseSerialize
-import ru.otus.otuskotlin.realestate.api.v1.models.AdCreateResponse
-import ru.otus.otuskotlin.realestate.api.v1.models.AdResponseObject
-import ru.otus.otuskotlin.realestate.api.v1.models.ReObject
-import ru.otus.otuskotlin.realestate.api.v1.models.Response
+import ru.otus.otuskotlin.realestate.api.v1.models.*
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
@@ -15,7 +12,8 @@ class SerializationResponseTest {
             title = "Title",
             description = "Description",
             re = ReObject(
-                price = 6000000
+                price = 6000000,
+                location = Location(25.5555, 37.77777)
             )
         )
     )
@@ -27,6 +25,7 @@ class SerializationResponseTest {
         assertContains(jsonString, """"title":"Title"""")
         assertContains(jsonString, """"responseType":"create"""")
         assertContains(jsonString, "\"price\":6000000")
+        assertContains(jsonString, "\"latitude\":25.5555")
     }
 
     @Test
@@ -37,6 +36,7 @@ class SerializationResponseTest {
         assertEquals("Title", decoded.ad?.title)
         assertEquals("Description", decoded.ad?.description)
         assertEquals(6000000, decoded.ad?.re?.price)
+        assertEquals(25.5555, decoded.ad?.re?.location?.latitude)
     }
 
     @Test
