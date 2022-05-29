@@ -70,21 +70,21 @@ fun ReContext.toTransportCreate(): Response = AdCreateResponse(
     ad = adResponse.toTransportAd()
 )
 
-private fun ReContext.toTransportRead(): Response = AdReadResponse(
+fun ReContext.toTransportRead(): Response = AdReadResponse(
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
     result = if (state == ReState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),
     ad = adResponse.toTransportAd()
 )
 
-private fun ReContext.toTransportUpdate(): Response = AdUpdateResponse(
+ fun ReContext.toTransportUpdate(): Response = AdUpdateResponse(
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
     result = if (state == ReState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),
     ad = adResponse.toTransportAd()
 )
 
-private fun ReContext.toTransportDelete(): Response = AdDeleteResponse(
+ fun ReContext.toTransportDelete(): Response = AdDeleteResponse(
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
     result = if (state == ReState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),

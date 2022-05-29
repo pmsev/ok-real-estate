@@ -1,0 +1,28 @@
+### Create
+POST http://127.0.0.1:8080/ad/create
+Content-Type: application/json
+
+{
+  "requestType": "create",
+  "requestId": null,
+  "debug": {
+    "mode": "test"
+  },
+  "ad": {
+    "title": "Title",
+    "description": "Description",
+    "sellerId": null,
+    "re": {
+      "id": null,
+      "square": 70.0,
+      "price": 15000000,
+      "district": "central",
+      "rooms": 3,
+      "address": "Address",
+      "location": {
+        "latitude": 25.5555,
+        "longitude": 37.7777
+      }
+    }
+  }
+}
