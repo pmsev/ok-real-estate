@@ -19,4 +19,6 @@ pluginManagement {
 include ("ok-real-estate-transport-main-openapi")
 include ("ok-real-estate-common")
 include("ok-real-estate-mappers")
-
+include("ok-real-estate-services")
+include("ok-real-estate-stubs")
+include("ok-real-estate-app-ktor")
