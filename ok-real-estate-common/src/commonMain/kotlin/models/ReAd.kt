@@ -11,4 +11,15 @@ data class ReAd (
     var reIntObject: ReIntObject = ReIntObject.NONE,
     var status: ReStatus = ReStatus.NONE,
     var actions: MutableList<ReAction> = mutableListOf()
-)
+){
+    fun deepCopy(
+    ) = ReAd(
+        id = this@ReAd.id,
+        title = this@ReAd.title,
+        description = this@ReAd.description,
+        sellerId = this@ReAd.sellerId,
+        status = this@ReAd.status,
+        reIntObject = this@ReAd.reIntObject.deepCopy(),
+        actions = this@ReAd.actions.toMutableList()
+    )
+}

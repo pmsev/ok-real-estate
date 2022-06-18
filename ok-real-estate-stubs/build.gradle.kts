@@ -5,7 +5,10 @@ plugins {
 group = rootProject.group
 version = rootProject.version
 
+
 dependencies {
-    implementation(kotlin("stdlib"))
+    val jacksonVersion: String by project
+    implementation(kotlin("stdlib-jdk8"))
     implementation(project(":ok-real-estate-common"))
 }
+

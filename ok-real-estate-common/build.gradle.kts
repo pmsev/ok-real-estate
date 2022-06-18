@@ -11,12 +11,14 @@ kotlin {
 
     sourceSets {
         val datetimeVersion: String by project
+        val kotlinVersion: String by project
 
         val commonMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-common"))
 
                 api("org.jetbrains.kotlinx:kotlinx-datetime:$datetimeVersion")
+                implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
             }
         }
         val commonTest by getting {

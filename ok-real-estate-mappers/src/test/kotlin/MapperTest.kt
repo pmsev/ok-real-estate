@@ -52,7 +52,7 @@ class MapperTest {
                     code = "err",
                     group = "request",
                     field = "title",
-                    message = "wrong title",
+                    message = "wrong title"
                 )
             ),
             state = ReState.RUNNING,
