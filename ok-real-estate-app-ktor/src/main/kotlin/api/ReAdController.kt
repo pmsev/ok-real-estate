@@ -2,58 +2,53 @@ package api
 
 import ReContext
 import fromTransport
+import heplers.asReError
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
+import kotlinx.datetime.Clock
+import models.ReCommand
+import models.ReState
 import ru.otus.otuskotlin.realestate.api.v1.models.*
 import services.ReAdService
-import toTransportCreate
-import toTransportDelete
-import toTransportRead
-import toTransportSearch
-import toTransportUpdate
+import toTransportAd
 
-suspend fun ApplicationCall.createAd(reAdService: ReAdService) {
-    val createAdRequest = receive<AdCreateRequest>()
-    respond(
-        ReContext().apply { fromTransport(createAdRequest) }.let {
-            reAdService.createAd(it)
-        }.toTransportCreate()
+suspend fun ApplicationCall.createAd(adService: ReAdService) {
+    val ctx = ReContext(
+        timeStart = Clock.System.now(),
     )
+    try {
+        val request = receive<AdCreateRequest>()
+        ctx.fromTransport(request)
+        adService.createAd(ctx)
+        val response = ctx.toTransportAd()
+        respond(response)
+    } catch (e: Throwable) {
+        ctx.command = ReCommand.CREATE
+        ctx.state = ReState.FAILING
+        ctx.errors.add(e.asReError())
+        adService.createAd(ctx)
+        val response = ctx.toTransportAd()
+        respond(response)
+    }
 }
 
-suspend fun ApplicationCall.readAd(reAdService: ReAdService) {
-    val readAdRequest = receive<AdReadRequest>()
-    respond(
-        ReContext().apply { fromTransport(readAdRequest) }.let {
-            reAdService.readAd(it, ::buildError)
-        }.toTransportRead()
-    )
-}
+suspend fun ApplicationCall.readAd(service: ReAdService) =
+    controllerHelper<AdReadRequest, AdReadResponse>(ReCommand.READ) {
+        service.readAd(this)
+    }
 
-suspend fun ApplicationCall.updateAd(reAdService: ReAdService) {
-    val updateAdRequest = receive<AdUpdateRequest>()
-    respond(
-        ReContext().apply { fromTransport(updateAdRequest) }.let {
-            reAdService.updateAd(it, ::buildError)
-        }.toTransportUpdate()
-    )
-}
+suspend fun ApplicationCall.updateAd(service: ReAdService) =
+    controllerHelper<AdUpdateRequest, AdUpdateResponse>(ReCommand.UPDATE) {
+        service.updateAd(this)
+    }
 
-suspend fun ApplicationCall.deleteAd(reAdService: ReAdService) {
-    val deleteAdRequest = receive<AdDeleteRequest>()
-    respond(
-        ReContext().apply { fromTransport(deleteAdRequest) }.let {
-            reAdService.deleteAd(it, ::buildError)
-        }.toTransportDelete()
-    )
-}
+suspend fun ApplicationCall.deleteAd(service: ReAdService) =
+    controllerHelper<AdDeleteRequest, AdDeleteResponse>(ReCommand.DELETE) {
+        service.deleteAd(this)
+    }
 
-suspend fun ApplicationCall.searchAd(reAdService: ReAdService) {
-    val searchAdRequest = receive<AdSearchRequest>()
-    respond(
-        ReContext().apply { fromTransport(searchAdRequest) }.let {
-            reAdService.searchAd(it, ::buildError)
-        }.toTransportSearch()
-    )
-}
+suspend fun ApplicationCall.searchAd(adService: ReAdService) =
+    controllerHelper<AdSearchRequest, AdSearchResponse>(ReCommand.SEARCH) {
+        adService.searchAd(this)
+    }

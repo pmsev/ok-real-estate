@@ -5,7 +5,7 @@ import models.ReError
 import models.ReState
 
 fun ReContext.errorResponse(buildError: () -> ReError, error: (ReError) -> ReError) = apply {
-    state = ReState.FAILING
+    state = ReState.FINISHING
     errors.add(error(buildError()))
 }
 

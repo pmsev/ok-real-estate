@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package ru.otus.otuskotlin.realestate.api.v1
 import ru.otus.otuskotlin.realestate.api.v1.models.Request
 

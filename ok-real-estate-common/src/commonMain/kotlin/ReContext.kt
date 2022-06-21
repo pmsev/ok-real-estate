@@ -17,5 +17,14 @@ data class ReContext(
     var actionRequest: ReAction = ReAction(),
 
     var adResponse: ReAd = ReAd(),
-    var adsResponse: MutableList<ReAd> = mutableListOf()
+    var adsResponse: MutableList<ReAd> = mutableListOf(),
+
+    var adValidating: ReAd = ReAd(),
+    var adValidated: ReAd = ReAd(),
+
+    var adFilterValidating: ReAdFilter = ReAdFilter(),
+    var adFilterValidated: ReAdFilter = ReAdFilter()
+
+
+
 )
