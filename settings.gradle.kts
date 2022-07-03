@@ -24,4 +24,4 @@ include("ok-real-estate-stubs")
 include("ok-real-estate-app-ktor")
 include("cor")
 include("ok-real-estate-business-cor")
-
+include("ok-real-estate-kafka")

@@ -7,6 +7,8 @@ class ReAdService {
 
     private val processor = ReAdProcessor()
 
+    suspend fun exec(context: ReContext) = processor.exec(context)
+
     suspend fun createAd(context: ReContext) = processor.exec(context)
     suspend fun readAd(context: ReContext) = processor.exec(context)
     suspend fun updateAd(context: ReContext) = processor.exec(context)
