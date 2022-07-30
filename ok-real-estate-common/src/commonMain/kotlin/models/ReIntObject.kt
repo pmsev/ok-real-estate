@@ -13,6 +13,7 @@ data class ReIntObject(
     var location: ReoLocation = ReoLocation.NONE
 
 ) {
+
     fun deepCopy() = ReIntObject(
         id = this@ReIntObject.id,
         square = this@ReIntObject.square,
@@ -22,6 +23,7 @@ data class ReIntObject(
         rooms = this@ReIntObject.rooms,
         location = this@ReIntObject.location
     )
+
 
     companion object {
         val NONE = ReIntObject()

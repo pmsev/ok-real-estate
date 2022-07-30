@@ -1,8 +1,10 @@
 import kotlinx.datetime.Instant
 import models.*
+import repo.ReAdRepository
 import stubs.ReStubs
 
 data class ReContext(
+    var settings: ReSettings = ReSettings(),
     var command: ReCommand = ReCommand.NONE,
     var state: ReState = ReState.NONE,
     val errors: MutableList<ReError> = mutableListOf(),
@@ -15,6 +17,13 @@ data class ReContext(
     var adRequest: ReAd = ReAd(),
     var adFilterRequest: ReAdFilter = ReAdFilter(),
     var actionRequest: ReAction = ReAction(),
+
+    var adRepo: ReAdRepository = ReAdRepository.NONE,
+
+    var adRepoRead: ReAd = ReAd(),
+    var adRepoPrepare: ReAd = ReAd(),
+    var adRepoDone: ReAd = ReAd(),
+    var adsRepoDone: MutableList<ReAd> = mutableListOf(),
 
     var adResponse: ReAd = ReAd(),
     var adsResponse: MutableList<ReAd> = mutableListOf(),

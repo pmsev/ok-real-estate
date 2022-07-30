@@ -13,7 +13,7 @@ plugins {
 }
 
 application {
-    mainClass.set("kafka.KafkaMain")
+    mainClass.set("kafka.main")
 }
 
 docker {
