@@ -46,7 +46,7 @@ fun Map<Any?, Any?>.toReIntObject(): ReIntObject = ReIntObject(
 )
 
 fun Map<Any?, Any?>.toReoLocation(): ReoLocation = ReoLocation(
-    latitude = when (val value = this[FIELD_LOCATION_LATITUDE]) {
+    latitude = when (val value  = this[FIELD_LOCATION_LATITUDE]) {
         null -> Degree.NONE
         else -> Degree(value as Double)
     },

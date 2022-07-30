@@ -16,7 +16,7 @@ fun GraphTraversal<Vertex, Vertex>.addReIntObject(reIntObject: ReIntObject): Gra
         property(VertexProperty.Cardinality.single, FIELD_SQUARE, reIntObject.square)
             .property(VertexProperty.Cardinality.single, FIELD_PRICE, reIntObject.price)
             .property(VertexProperty.Cardinality.single, FIELD_ROOMS, reIntObject.rooms)
-            .property(VertexProperty.Cardinality.single, FIELD_DISTRICT, reIntObject.district)
+            .property(VertexProperty.Cardinality.single, FIELD_DISTRICT, reIntObject.district.name)
             .property(VertexProperty.Cardinality.single, FIELD_ADDRESS, reIntObject.address)
             .property(VertexProperty.Cardinality.single, FIELD_LOCATION_LATITUDE, reIntObject.location.latitude.asDouble())
             .property(VertexProperty.Cardinality.single, FIELD_LOCATION_LONGITUDE, reIntObject.location.longitude.asDouble())

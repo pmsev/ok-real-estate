@@ -24,7 +24,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.`__`.select
 import org.apache.tinkerpop.gremlin.structure.Vertex
 import repo.*
 
-class ReAdRepoGremlin (
+class ReAdRepoGremlin(
     private val hosts: String,
     private val port: Int = 8182,
     private val enableSsl: Boolean = false,
@@ -32,7 +32,7 @@ class ReAdRepoGremlin (
     initRepo: ((GraphTraversalSource) -> Unit)? = null,
     val randomUuid: () -> String = { uuid4().toString() },
 
-    ): ReAdRepository {
+    ) : ReAdRepository {
 
     val initializedObjects: List<ReAd>
 
@@ -54,6 +54,7 @@ class ReAdRepoGremlin (
             it.copy(id = ReAdId(id))
         }
     }
+
     private fun save(ad: ReAd): String = g.addV(ad.label()).addReAd(ad)?.next()?.id() as? String ?: ""
 
 
@@ -132,11 +133,11 @@ class ReAdRepoGremlin (
                 .V(key)
                 .`as`("a")
                 .choose(
-                    __.select<Vertex, Any>("a")
+                    select<Vertex, Any>("a")
                         .values<String>(FIELD_LOCK)
                         .`is`(oldLock?.asString()),
-                    __.select<Vertex, Vertex>("a").addReAd(newAd),
-                    __.select<Vertex, Vertex>("a")
+                    select<Vertex, Vertex>("a").addReAd(newAd),
+                    select<Vertex, Vertex>("a")
                 ).elementMap<Any>().toList()
         } catch (e: Throwable) {
             if (e is ResponseException || e.cause is ResponseException) {
@@ -180,11 +181,11 @@ class ReAdRepoGremlin (
             .V(key)
             .`as`("a")
             .choose(
-                __.select<Vertex, Any>("a")
+                select<Vertex, Any>("a")
                     .values<String>(FIELD_LOCK)
                     .`is`(oldLock),
-                __.select<Vertex, String>("a").drop().inject(RESULT_SUCCESS),
-                __.constant(RESULT_LOCK_FAILURE)
+                select<Vertex, String>("a").drop().inject(RESULT_SUCCESS),
+                constant(RESULT_LOCK_FAILURE)
             ).toList().firstOrNull()
 
         return when (result) {
@@ -198,9 +199,14 @@ class ReAdRepoGremlin (
     override suspend fun searchReAd(rq: DbReAdFilterRequest): DbReAdsResponse {
         val result = try {
             g.V()
-                .apply { rq.sellerIdFilter.takeIf { it != ReUserId.NONE }?.also { has(FIELD_SELLER_ID, it.asString()) } }
+                .apply {
+                    rq.sellerIdFilter.takeIf { it != ReUserId.NONE }?.also { has(FIELD_SELLER_ID, it.asString()) }
+                }
                 .apply { rq.titleFilter.takeIf { it.isNotBlank() }?.also { has(FIELD_TITLE, TextP.containing(it)) } }
-                .apply { rq.descriptionFilter.takeIf { it.isNotBlank() }?.also { has(FIELD_DESCRIPTION, TextP.containing(it)) } }
+                .apply {
+                    rq.descriptionFilter.takeIf { it.isNotBlank() }
+                        ?.also { has(FIELD_DESCRIPTION, TextP.containing(it)) }
+                }
                 .elementMap<Any>()
                 .toList()
         } catch (e: Throwable) {
@@ -215,6 +221,7 @@ class ReAdRepoGremlin (
             isSuccess = true
         )
     }
+
     companion object {
         val resultErrorEmptyId = DbReAdResponse(
             result = null,

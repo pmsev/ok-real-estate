@@ -12,9 +12,9 @@ abstract class RepoAdSearchTest {
 
     @Test
     fun searchSeller() {
-        val result = runBlocking { repo.searchReAd(DbReAdFilterRequest(sellerIdFilter = searchSellerId, titleFilter = "title", descriptionFilter = "")) }
+        val result = runBlocking { repo.searchReAd(DbReAdFilterRequest(sellerIdFilter = searchSellerId, titleFilter = "stub", descriptionFilter = "")) }
         assertEquals(true, result.isSuccess)
-        val expected = initAds.filter { it.sellerId == searchSellerId }.sortedBy { it.id.asString() }
+        val expected = initAds.filter { it.sellerId == searchSellerId && it.title.contains("stub")}.sortedBy { it.id.asString() }
         assertEquals(expected, result.result?.sortedBy { it.id.asString() })
         assertEquals(emptyList(), result.errors)
     }

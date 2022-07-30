@@ -10,6 +10,7 @@ object ArcadeDbContainer {
             withExposedPorts(2480, 2424, 8182)
             withEnv("arcadedb.server.rootPassword", "1r2d3g4h")
             withEnv("arcadedb.server.plugins", "GremlinServer:com.arcadedb.server.gremlin.GremlinServerPlugin")
+                .withEnv("TESTCONTAINERS_RYUK_DISABLED", "true")
             waitingFor(Wait.forLogMessage(".*ArcadeDB Server started.*\\n", 1))
             start()
             println("ARCADE: http://${host}:${getMappedPort(2480)}")
