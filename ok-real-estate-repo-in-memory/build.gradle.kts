@@ -20,6 +20,6 @@ dependencies {
     testImplementation(kotlin("test-common"))
     testImplementation(kotlin("test-annotations-common"))
     testImplementation(kotlin("test-junit"))
-    //testImplementation(project(":ok-real-estate-repo-test"))
+    testImplementation(project(":ok-real-estate-repo-test"))
 
 }
