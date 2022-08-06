@@ -10,6 +10,7 @@ data class ReAd (
     var sellerId: ReUserId = ReUserId.NONE,
     var reIntObject: ReIntObject = ReIntObject.NONE,
     var status: ReStatus = ReStatus.NONE,
+    var lock: ReAdLock = ReAdLock.NONE,
     var actions: MutableList<ReAction> = mutableListOf()
 ){
     fun deepCopy(
@@ -19,6 +20,7 @@ data class ReAd (
         description = this@ReAd.description,
         sellerId = this@ReAd.sellerId,
         status = this@ReAd.status,
+        lock = this@ReAd.lock,
         reIntObject = this@ReAd.reIntObject.deepCopy(),
         actions = this@ReAd.actions.toMutableList()
     )

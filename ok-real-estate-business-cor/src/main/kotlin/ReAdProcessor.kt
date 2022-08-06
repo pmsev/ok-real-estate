@@ -1,21 +1,23 @@
-import common.initStatus
-import common.operation
+import common.*
 import models.ReAdId
 import models.ReCommand
+import models.ReSettings
+import models.ReState
+import repo.*
 import stubs.*
 import validation.*
 
-class ReAdProcessor {
+class ReAdProcessor(private val settings: ReSettings = ReSettings()) {
 
-    suspend fun exec(ctx: ReContext) = businessChain.exec(ctx)
+    suspend fun exec(ctx: ReContext) = businessChain.exec(ctx.apply { settings = this@ReAdProcessor.settings })
 
     companion object {
         private const val TITLE_FIELD_NAME = "title"
         private const val DESCRIPTION_FIELD_NAME = "description"
-        private const val ID_FIELD_NAME = "id"
 
         private val businessChain = rootChain<ReContext> {
             initStatus("Инициализация статуса")
+            initRepo("Инициализация репозитория")
 
             operation("Создание объявления", ReCommand.CREATE) {
                 stubs("Обработка стабов") {
@@ -39,6 +41,13 @@ class ReAdProcessor {
 
                     finishAdValidation("Успешное завершение процедуры валидации")
                 }
+                chain {
+                    title = "Логика сохранения"
+                    repoPrepareCreate("Подготовка объекта для сохранения")
+                    repoCreate("Создание объявления в БД")
+                }
+
+                prepareResult("Подготовка ответа")
             }
             operation("Получить объявление", ReCommand.READ) {
                 stubs("Обработка стабов") {
@@ -51,11 +60,22 @@ class ReAdProcessor {
                     title = "Валидация запроса"
                     worker("Копируем поля в adValidating") { adValidating = adRequest.deepCopy() }
                     worker("Очистка id") { adValidating.id = ReAdId(adValidating.id.asString().trim()) }
-                    validateFieldNotEmpty("Проверка на непустой id", ID_FIELD_NAME)
+                    validateIdIsNotEmpty("Проверка на непустой id")
                     validateIdProperFormat("Проверка формата id")
 
                     finishAdValidation("Успешное завершение процедуры валидации")
                 }
+                chain {
+                    title = "Логика сохранения"
+                    repoRead("Чтение объявления из БД")
+                    worker {
+                        title = "Подготовка ответа для Read"
+                        on { state == ReState.RUNNING }
+                        handle { adRepoDone = adRepoRead }
+                    }
+                }
+
+                prepareResult("Подготовка ответа")
             }
             operation("Изменить объявление", ReCommand.UPDATE) {
                 stubs("Обработка стабов") {
@@ -72,7 +92,7 @@ class ReAdProcessor {
                     worker("Очистка id") { adValidating.id = ReAdId(adValidating.id.asString().trim()) }
                     worker("Очистка заголовка") { adValidating.title = adValidating.title.trim() }
                     worker("Очистка описания") { adValidating.description = adValidating.description.trim() }
-                    validateFieldNotEmpty("Проверка на непустой id", ID_FIELD_NAME)
+                    validateIdIsNotEmpty("Проверка на непустой id")
                     validateIdProperFormat("Проверка формата id")
                     validateFieldNotEmpty("Проверка на непустой заголовок", TITLE_FIELD_NAME)
                     validateFieldHasContent("Проверка на наличие содержания в заголовке", TITLE_FIELD_NAME)
@@ -82,6 +102,15 @@ class ReAdProcessor {
 
                     finishAdValidation("Успешное завершение процедуры валидации")
                 }
+                chain {
+                    title = "Логика сохранения"
+                    repoRead("Чтение объявления из БД")
+                    repoCheckReadLock("Проверяем блокировку")
+                    repoPrepareUpdate("Подготовка объекта для обновления")
+                    repoUpdate("Обновление объявления в БД")
+                }
+
+                prepareResult("Подготовка ответа")
             }
             operation("Удалить объявление", ReCommand.DELETE) {
                 stubs("Обработка стабов") {
@@ -94,11 +123,20 @@ class ReAdProcessor {
                     title = "Валидация запроса"
                     worker("Копируем поля в adValidating") { adValidating = adRequest.deepCopy() }
                     worker("Очистка id") { adValidating.id = ReAdId(adValidating.id.asString().trim()) }
-                    validateFieldNotEmpty("Проверка на непустой id", ID_FIELD_NAME)
+                    validateIdIsNotEmpty("Проверка на непустой id")
                     validateIdProperFormat("Проверка формата id")
 
                     finishAdValidation("Успешное завершение процедуры валидации")
                 }
+                chain {
+                    title = "Логика сохранения"
+                    repoRead("Чтение объявления из БД")
+                    repoCheckReadLock("Проверяем блокировку")
+                    repoPrepareDelete("Подготовка объекта для удаления")
+                    repoDelete("Удаление объявления из БД")
+                }
+
+                prepareResult("Подготовка ответа")
             }
             operation("Поиск объявлений", ReCommand.SEARCH) {
                 stubs("Обработка стабов") {
@@ -113,6 +151,8 @@ class ReAdProcessor {
 
                     finishAdFilterValidation("Успешное завершение процедуры валидации")
                 }
+                repoSearch("Поиск объявления в БД по фильтру")
+                prepareResult("Подготовка ответа")
             }
 
         }.build()
