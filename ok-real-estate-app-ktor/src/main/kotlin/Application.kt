@@ -34,7 +34,7 @@ fun Application.module(settings: ReSettings? = null,
                        authConfig: KtorAuthConfig = KtorAuthConfig(environment)
 ) {
 
-//    install(Routing)
+    install(Routing)
 
     install(CachingHeaders)
     install(DefaultHeaders)
@@ -91,7 +91,7 @@ fun Application.module(settings: ReSettings? = null,
             repoTest = ReAdRepoInMemory(),
         )
     }
-    val reAdService = ReAdService()
+    val reAdService by lazy {ReAdService(corSettings)}
     val reOffersService = ReOffersService()
 
     routing {
