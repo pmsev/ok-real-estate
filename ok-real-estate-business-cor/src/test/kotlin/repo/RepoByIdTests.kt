@@ -3,6 +3,7 @@ package repo
 import ReAdProcessor
 import ReAdRepoInMemory
 import ReContext
+import helpers.principalUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import models.*
@@ -26,11 +27,17 @@ fun repoNotFoundTest(processor: ReAdProcessor, command: ReCommand) = runTest {
         state = ReState.NONE,
         workMode = ReWorkMode.TEST,
         adRepo = repo,
+        principal = principalUser(),
         adRequest = ReAd(
             id = ReAdId("12345"),
             title = "xyz",
             description = "xyz",
             lock = ReAdLock(uuid),
+            reIntObject =  ReIntObject(
+                square = 70.0,
+                rooms = 2,
+                district = ReDistrict.SOUTH
+            )
         ),
     )
     processor.exec(ctx)

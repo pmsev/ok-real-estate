@@ -3,6 +3,7 @@ package repo
 import ReAdProcessor
 import ReAdRepoInMemory
 import ReContext
+import helpers.principalUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import models.*
@@ -43,6 +44,7 @@ class BlRepoDeleteTest {
             command = command,
             state = ReState.NONE,
             workMode = ReWorkMode.TEST,
+            principal = principalUser(),
             adRequest = adToUpdate,
         )
         processor.exec(ctx)

@@ -60,6 +60,9 @@ dependencies {
     implementation(ktor("cors"))
     implementation(ktor("default-headers"))
     implementation(ktor("websockets"))
+    implementation(ktor("auth"))
+    implementation(ktor("auth-jwt"))
+
 
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
@@ -68,6 +71,7 @@ dependencies {
     implementation(project(":ok-real-estate-transport-main-openapi"))
     implementation(project(":ok-real-estate-services"))
     implementation(project(":ok-real-estate-stubs"))
+    implementation(project(":ok-real-estate-repo-in-memory"))
 
     testImplementation(kotlin("test-junit"))
     testImplementation(ktor("test-host"))

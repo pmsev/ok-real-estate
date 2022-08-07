@@ -1,13 +1,22 @@
 package validation
 
 import ReAdProcessor
+import ReAdRepoStub
 import models.ReCommand
+import models.ReSettings
 import org.junit.Test
 
 
 class BusinessValidationCreateTest {
-    private val processor = ReAdProcessor()
+
     private val command = ReCommand.CREATE
+    private val settings by lazy {
+        ReSettings(
+            repoTest = ReAdRepoStub()
+        )
+    }
+
+    private val processor  by lazy {ReAdProcessor(settings)}
 
     @Test
     fun correctTitle() = validationTitleCorrect(command, processor)

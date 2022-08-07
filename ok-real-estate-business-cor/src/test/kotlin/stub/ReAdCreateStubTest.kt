@@ -3,6 +3,7 @@ package ru.otus.otuskotlin.marketplace.biz.stub.stub
 import ReAdApartments.AD_TWO_BEDROOM_APART
 import ReAdProcessor
 import ReContext
+import helpers.principalUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import models.*
@@ -27,6 +28,7 @@ class ReAdCreateStubTest {
             state = ReState.NONE,
             workMode = ReWorkMode.STUB,
             stubCase = ReStubs.SUCCESS,
+            principal = principalUser(),
             adRequest = ReAd(
                 id = id,
                 title = title,
@@ -46,6 +48,7 @@ class ReAdCreateStubTest {
             state = ReState.NONE,
             workMode = ReWorkMode.STUB,
             stubCase = ReStubs.BAD_TITLE,
+            principal = principalUser(),
             adRequest = ReAd(
                 id = id,
                 title = "",
@@ -64,6 +67,7 @@ class ReAdCreateStubTest {
             state = ReState.NONE,
             workMode = ReWorkMode.STUB,
             stubCase = ReStubs.BAD_DESCRIPTION,
+            principal = principalUser(),
             adRequest = ReAd(
                 id = id,
                 title = title,
@@ -83,6 +87,7 @@ class ReAdCreateStubTest {
             state = ReState.NONE,
             workMode = ReWorkMode.STUB,
             stubCase = ReStubs.DB_ERROR,
+            principal = principalUser(),
             adRequest = ReAd(
                 id = id,
             ),
@@ -99,6 +104,7 @@ class ReAdCreateStubTest {
             state = ReState.NONE,
             workMode = ReWorkMode.STUB,
             stubCase = ReStubs.BAD_ID,
+            principal = principalUser(),
             adRequest = ReAd(
                 id = id,
                 title = title,

@@ -2,7 +2,9 @@ package validation
 
 import ReAdApartments.AD_TWO_BEDROOM_APART
 import ReAdProcessor
+import ReAdRepoStub
 import ReContext
+import helpers.principalUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import models.*
@@ -17,6 +19,7 @@ fun validationDescriptionCorrect(command: ReCommand, processor: ReAdProcessor) =
         command = command,
         state = ReState.NONE,
         workMode = ReWorkMode.TEST,
+        principal = principalUser(),
         adRequest = ReAd(
             id = ReAdId("777"),
             title = "some title",
@@ -36,6 +39,7 @@ fun validationDescriptionTrim(command: ReCommand, processor: ReAdProcessor) = ru
         command = command,
         state = ReState.NONE,
         workMode = ReWorkMode.TEST,
+        principal = principalUser(),
         adRequest = ReAd(
             id = ReAdId("123"),
             title = "abc",
@@ -55,6 +59,7 @@ fun validationDescriptionEmpty(command: ReCommand, processor: ReAdProcessor) = r
         command = command,
         state = ReState.NONE,
         workMode = ReWorkMode.TEST,
+        principal = principalUser(),
         adRequest = ReAd(
             id = ReAdId("123"),
             title = "abc",
@@ -76,6 +81,8 @@ fun validationDescriptionSymbols(command: ReCommand, processor: ReAdProcessor) =
         command = command,
         state = ReState.NONE,
         workMode = ReWorkMode.TEST,
+        principal = principalUser(),
+        adRepo = ReAdRepoStub(),
         adRequest = ReAd(
             id = ReAdId("123"),
             title = "abc",

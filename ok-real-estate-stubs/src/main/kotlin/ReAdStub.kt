@@ -5,7 +5,7 @@ import stubs.RealEstateObject.getModel
 
 object ReAdStub {
     fun prepareResult(block: ReAd.() -> Unit): ReAd = getModel().apply(block)
-    fun prepareSearchList(searchString: String): Collection<ReAd> = listOf(
+    fun prepareSearchList(searchString: String) = listOf(
         reSomeAd("111","Южн"),
         reSomeAd("777","дешев"),
         reSomeAd("7","ремонт"),

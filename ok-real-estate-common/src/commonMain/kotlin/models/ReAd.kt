@@ -1,5 +1,8 @@
 package models
 
+import models.security.ReAdPermissionClient
+import models.security.RePrincipalRelations
+
 /**
  * Real Estate Advertisement - объявление о продаже недвижимости
  */
@@ -11,7 +14,9 @@ data class ReAd (
     var reIntObject: ReIntObject = ReIntObject.NONE,
     var status: ReStatus = ReStatus.NONE,
     var lock: ReAdLock = ReAdLock.NONE,
-    var actions: MutableList<ReAction> = mutableListOf()
+    var actions: MutableList<ReAction> = mutableListOf(),
+    var principalRelations: Set<RePrincipalRelations> = emptySet(),
+    val permissionsClient: MutableSet<ReAdPermissionClient> = mutableSetOf(),
 ){
     fun deepCopy(
     ) = ReAd(
@@ -22,6 +27,7 @@ data class ReAd (
         status = this@ReAd.status,
         lock = this@ReAd.lock,
         reIntObject = this@ReAd.reIntObject.deepCopy(),
-        actions = this@ReAd.actions.toMutableList()
+        actions = this@ReAd.actions.toMutableList(),
+        permissionsClient = this@ReAd.permissionsClient.toMutableSet()
     )
 }

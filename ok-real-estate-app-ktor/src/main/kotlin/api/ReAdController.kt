@@ -4,9 +4,12 @@ import ReContext
 import fromTransport
 import heplers.asReError
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import kotlinx.datetime.Clock
+import mappers.toModel
 import models.ReCommand
 import models.ReState
 import ru.otus.otuskotlin.realestate.api.v1.models.*
@@ -16,6 +19,7 @@ import toTransportAd
 suspend fun ApplicationCall.createAd(adService: ReAdService) {
     val ctx = ReContext(
         timeStart = Clock.System.now(),
+        principal = principal<JWTPrincipal>().toModel(),
     )
     try {
         val request = receive<AdCreateRequest>()
