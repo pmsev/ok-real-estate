@@ -2,10 +2,11 @@ package services
 
 import ReAdProcessor
 import ReContext
+import models.ReSettings
 
-class ReAdService {
+class ReAdService(val settings: ReSettings) {
 
-    private val processor = ReAdProcessor()
+    private val processor = ReAdProcessor(settings)
 
     suspend fun exec(context: ReContext) = processor.exec(context)
 

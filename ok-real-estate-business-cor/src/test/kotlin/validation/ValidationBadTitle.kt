@@ -2,7 +2,9 @@ package validation
 
 import ReAdApartments.AD_TWO_BEDROOM_APART
 import ReAdProcessor
+import ReAdRepoStub
 import ReContext
+import helpers.principalUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import models.*
@@ -18,6 +20,8 @@ fun validationTitleCorrect(command: ReCommand, processor: ReAdProcessor) = runTe
         command = command,
         state = ReState.NONE,
         workMode = ReWorkMode.TEST,
+        principal = principalUser(),
+        adRepo = ReAdRepoStub(),
         adRequest = ReAd(
             id = ReAdId("777"),
             title = "some title",
@@ -38,6 +42,8 @@ fun validationTitleTrim(command: ReCommand, processor: ReAdProcessor) = runTest 
         command = command,
         state = ReState.NONE,
         workMode = ReWorkMode.TEST,
+        adRepo = ReAdRepoStub(),
+        principal = principalUser(),
         adRequest = ReAd(
             id = ReAdId("777"),
             title = " \n\t title \t\n ",
@@ -57,6 +63,8 @@ fun validationTitleEmpty(command: ReCommand, processor: ReAdProcessor) = runTest
         command = command,
         state = ReState.NONE,
         workMode = ReWorkMode.TEST,
+        adRepo = ReAdRepoStub(),
+        principal = principalUser(),
         adRequest = ReAd(
             id = ReAdId("777"),
             title = "",
@@ -78,6 +86,7 @@ fun validationTitleSymbols(command: ReCommand, processor: ReAdProcessor) = runTe
         command = command,
         state = ReState.NONE,
         workMode = ReWorkMode.TEST,
+        adRepo = ReAdRepoStub(),
         adRequest = ReAd(
             id = ReAdId("777"),
             title = "!@#$%^&*(),.{}",

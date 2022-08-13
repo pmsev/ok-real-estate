@@ -2,7 +2,9 @@ package validation
 
 import ReAdApartments.AD_TWO_BEDROOM_APART
 import ReAdProcessor
+import ReAdRepoStub
 import ReContext
+import helpers.principalUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import models.*
@@ -16,6 +18,8 @@ fun validationEmptyObject(command: ReCommand, processor: ReAdProcessor) = runTes
         command = command,
         state = ReState.NONE,
         workMode = ReWorkMode.TEST,
+        principal = principalUser(),
+        adRepo = ReAdRepoStub(),
         adRequest = ReAd(
             id = ReAdId("123"),
             title = "abc",
@@ -37,6 +41,8 @@ fun validationNonEmptyObject(command: ReCommand, processor: ReAdProcessor) = run
         command = command,
         state = ReState.NONE,
         workMode = ReWorkMode.TEST,
+        adRepo = ReAdRepoStub(),
+        principal = principalUser(),
         adRequest = ReAd(
             id = ReAdId("123"),
             title = "abc",

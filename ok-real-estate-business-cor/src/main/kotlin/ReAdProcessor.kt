@@ -3,6 +3,10 @@ import models.ReAdId
 import models.ReCommand
 import models.ReSettings
 import models.ReState
+import permissions.accessValidation
+import permissions.chainPermissions
+import permissions.frontPermissions
+import permissions.searchTypes
 import repo.*
 import stubs.*
 import validation.*
@@ -41,12 +45,22 @@ class ReAdProcessor(private val settings: ReSettings = ReSettings()) {
 
                     finishAdValidation("Успешное завершение процедуры валидации")
                 }
+                chainPermissions("Вычисление разрешений для пользователя")
+                worker {
+                    title = "Инициализация adRepoRead"
+                    on { state == ReState.RUNNING }
+                    handle {
+                        adRepoRead = adValidated
+                        adRepoRead.sellerId = principal.id
+                    }
+                }
+                accessValidation("Вычисление прав доступа")
                 chain {
                     title = "Логика сохранения"
                     repoPrepareCreate("Подготовка объекта для сохранения")
                     repoCreate("Создание объявления в БД")
                 }
-
+                frontPermissions("Вычисление пользовательских разрешений для фронтенда")
                 prepareResult("Подготовка ответа")
             }
             operation("Получить объявление", ReCommand.READ) {
@@ -65,6 +79,7 @@ class ReAdProcessor(private val settings: ReSettings = ReSettings()) {
 
                     finishAdValidation("Успешное завершение процедуры валидации")
                 }
+                chainPermissions("Вычисление разрешений для пользователя")
                 chain {
                     title = "Логика сохранения"
                     repoRead("Чтение объявления из БД")
@@ -102,6 +117,7 @@ class ReAdProcessor(private val settings: ReSettings = ReSettings()) {
 
                     finishAdValidation("Успешное завершение процедуры валидации")
                 }
+                chainPermissions("Вычисление разрешений для пользователя")
                 chain {
                     title = "Логика сохранения"
                     repoRead("Чтение объявления из БД")
@@ -128,6 +144,7 @@ class ReAdProcessor(private val settings: ReSettings = ReSettings()) {
 
                     finishAdValidation("Успешное завершение процедуры валидации")
                 }
+                chainPermissions("Вычисление разрешений для пользователя")
                 chain {
                     title = "Логика сохранения"
                     repoRead("Чтение объявления из БД")
@@ -151,6 +168,8 @@ class ReAdProcessor(private val settings: ReSettings = ReSettings()) {
 
                     finishAdFilterValidation("Успешное завершение процедуры валидации")
                 }
+                chainPermissions("Вычисление разрешений для пользователя")
+                searchTypes("Подготовка поискового запроса")
                 repoSearch("Поиск объявления в БД по фильтру")
                 prepareResult("Подготовка ответа")
             }

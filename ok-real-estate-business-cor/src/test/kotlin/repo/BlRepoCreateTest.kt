@@ -3,6 +3,7 @@ package repo
 import ReAdProcessor
 import ReAdRepoInMemory
 import ReContext
+import helpers.principalUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import models.*
@@ -29,6 +30,7 @@ class BlRepoCreateTest {
             command = command,
             state = ReState.NONE,
             workMode = ReWorkMode.TEST,
+            principal = principalUser(),
             adRequest = ReAd(
                 id = ReAdId("123"),
                 title = "abc",

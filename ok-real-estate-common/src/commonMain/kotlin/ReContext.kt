@@ -1,5 +1,6 @@
 import kotlinx.datetime.Instant
 import models.*
+import models.security.RePrincipalModel
 import repo.ReAdRepository
 import stubs.ReStubs
 
@@ -11,6 +12,10 @@ data class ReContext(
 
     var workMode: ReWorkMode = ReWorkMode.PROD,
     var stubCase: ReStubs = ReStubs.NONE,
+
+    var principal: RePrincipalModel = RePrincipalModel.NONE,
+    val chainPermissions: MutableSet<ReUserPermissions> = mutableSetOf(),
+    var permitted: Boolean = false,
 
     var requestId: ReRequestId = ReRequestId.NONE,
     var timeStart: Instant = Instant.NONE,
