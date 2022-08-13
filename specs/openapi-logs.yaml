@@ -1,0 +1,99 @@
+openapi: 3.0.4
+info:
+  title: Real estate add app log models
+  description: Log models for logging services of real estate ads app
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+paths:
+  /log:
+    get:
+      responses:
+        200:
+          description: logs
+          content: {}
+
+components:
+  schemas:
+    CommonLogModel:
+      title: Общая модель лога
+      description: Общая модель лога для всех микросервисов системы
+      type: object
+      properties:
+        messageId:
+          type: string
+        messageTime:
+          type: string
+        logId:
+          type: string
+        source:
+          type: string
+        realestate:
+          $ref: '#/components/schemas/ReLogModel'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorLogModel'
+
+    ReLogModel:
+      title: Модель лога для микросервиса Real estate ads
+      type: object
+      properties:
+        requestId:
+          type: string
+        requestAd:
+          $ref: '#/components/schemas/ReAdLog'
+        requestFilter:
+          $ref: '#/components/schemas/ReAdFilterLog'
+        responseAd:
+          $ref: '#/components/schemas/ReAdLog'
+        responseAds:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReAdLog'
+
+    ErrorLogModel:
+      title: Модель лога для ошибки
+      type: object
+      properties:
+        message:
+          type: string
+        field:
+          type: string
+        code:
+          type: string
+        level:
+          type: string
+
+    ReAdLog:
+      title: Модель лога для объявления
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        sellerId:
+          type: string
+        permissions:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+
+    ReAdFilterLog:
+      title: Модель лога фильтра
+      properties:
+        searchString:
+          type: string
+        sellerId:
+          type: string
+        searchTypes:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+
