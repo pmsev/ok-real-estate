@@ -72,6 +72,8 @@ dependencies {
     implementation(project(":ok-real-estate-services"))
     implementation(project(":ok-real-estate-stubs"))
     implementation(project(":ok-real-estate-repo-in-memory"))
+    implementation(project(":ok-real-estate-logging"))
+    implementation(project(":ok-real-estate-logs-mapper"))
 
     testImplementation(kotlin("test-junit"))
     testImplementation(ktor("test-host"))
