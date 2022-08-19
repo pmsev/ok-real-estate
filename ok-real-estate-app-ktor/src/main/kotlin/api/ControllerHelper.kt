@@ -9,7 +9,6 @@ import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
-import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
 import mappers.toModel
 import models.ReCommand

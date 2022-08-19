@@ -6,7 +6,7 @@ import reLogger
 import services.ReAdService
 import services.ReOffersService
 
-private val logger = reLogger(Route::reAd::class.java)
+private val logger = reLogger("reLogger")
 
 fun Route.reAd(reAdService: ReAdService) {
     route("ad") {
