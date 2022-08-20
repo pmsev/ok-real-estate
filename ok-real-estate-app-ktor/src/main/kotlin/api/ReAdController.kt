@@ -1,58 +1,49 @@
 package api
 
-import ReContext
-import fromTransport
-import heplers.asReError
+import ReLogWrapper
 import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.auth.jwt.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import kotlinx.datetime.Clock
-import mappers.toModel
 import models.ReCommand
-import models.ReState
 import ru.otus.otuskotlin.realestate.api.v1.models.*
 import services.ReAdService
-import toTransportAd
 
-suspend fun ApplicationCall.createAd(adService: ReAdService) {
-    val ctx = ReContext(
-        timeStart = Clock.System.now(),
-        principal = principal<JWTPrincipal>().toModel(),
-    )
-    try {
-        val request = receive<AdCreateRequest>()
-        ctx.fromTransport(request)
-        adService.createAd(ctx)
-        val response = ctx.toTransportAd()
-        respond(response)
-    } catch (e: Throwable) {
-        ctx.command = ReCommand.CREATE
-        ctx.state = ReState.FAILING
-        ctx.errors.add(e.asReError())
-        adService.createAd(ctx)
-        val response = ctx.toTransportAd()
-        respond(response)
+suspend fun ApplicationCall.createAd(adService: ReAdService, logger: ReLogWrapper) =
+    controllerHelper<AdCreateRequest, AdCreateResponse>(
+        logger = logger,
+        logId = "ad-create",
+        command = ReCommand.CREATE
+    ) {
+        adService.createAd(this)
     }
-}
 
-suspend fun ApplicationCall.readAd(service: ReAdService) =
-    controllerHelper<AdReadRequest, AdReadResponse>(ReCommand.READ) {
+
+suspend fun ApplicationCall.readAd(service: ReAdService, logger: ReLogWrapper) =
+    controllerHelper<AdReadRequest, AdReadResponse>(
+        logger = logger,
+        logId = "ad-create", command = ReCommand.READ
+    ) {
         service.readAd(this)
     }
 
-suspend fun ApplicationCall.updateAd(service: ReAdService) =
-    controllerHelper<AdUpdateRequest, AdUpdateResponse>(ReCommand.UPDATE) {
+suspend fun ApplicationCall.updateAd(service: ReAdService, logger: ReLogWrapper) =
+    controllerHelper<AdUpdateRequest, AdUpdateResponse>(
+        logger = logger,
+        logId = "ad-create", command = ReCommand.UPDATE
+    ) {
         service.updateAd(this)
     }
 
-suspend fun ApplicationCall.deleteAd(service: ReAdService) =
-    controllerHelper<AdDeleteRequest, AdDeleteResponse>(ReCommand.DELETE) {
+suspend fun ApplicationCall.deleteAd(service: ReAdService, logger: ReLogWrapper) =
+    controllerHelper<AdDeleteRequest, AdDeleteResponse>(
+        logger = logger,
+        logId = "ad-create", command = ReCommand.DELETE
+    ) {
         service.deleteAd(this)
     }
 
-suspend fun ApplicationCall.searchAd(adService: ReAdService) =
-    controllerHelper<AdSearchRequest, AdSearchResponse>(ReCommand.SEARCH) {
+suspend fun ApplicationCall.searchAd(adService: ReAdService, logger: ReLogWrapper) =
+    controllerHelper<AdSearchRequest, AdSearchResponse>(
+        logger = logger,
+        logId = "ad-create", command = ReCommand.SEARCH
+    ) {
         adService.searchAd(this)
     }

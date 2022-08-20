@@ -2,25 +2,28 @@ package api
 
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
+import reLogger
 import services.ReAdService
 import services.ReOffersService
+
+private val logger = reLogger("reLogger")
 
 fun Route.reAd(reAdService: ReAdService) {
     route("ad") {
         post("create") {
-            call.createAd(reAdService)
+            call.createAd(reAdService, logger)
         }
         post("read") {
-            call.readAd(reAdService)
+            call.readAd(reAdService, logger)
         }
         post("update") {
-            call.updateAd(reAdService)
+            call.updateAd(reAdService, logger)
         }
         post("delete") {
-            call.deleteAd(reAdService)
+            call.deleteAd(reAdService, logger)
         }
         post("search") {
-            call.searchAd(reAdService)
+            call.searchAd(reAdService, logger)
         }
     }
 }
